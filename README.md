@@ -1,20 +1,66 @@
 # Blockchain-Projects
-🚀 Excited to Share My Latest Project: A Blockchain-Based Smart Contract for MSME's Coffee Farm! 
-I’m thrilled to announce that I’ve successfully developed and deployed a Smart Contract using Solidity and Remix IDE for a Coffee Farm! This project is a step towards leveraging blockchain technology to bring transparency, efficiency, and trust to the coffee supply chain.  
-                                                     What Does the Smart Contract Do?
-The smart contract allows coffee farmers to:  
-✅ Track coffee batches from harvest to sale.  
-✅ Record key details like farm name, origin, harvest date, roasting date, and quality grade.  
-✅ Transfer ownership of coffee batches securely using blockchain.  
-                                                                   Why Blockchain?
-Blockchain ensures:  
-🔒 Transparency: Every transaction is recorded on an immutable ledger.  
-🤝 Trust: Buyers can verify the authenticity of the coffee they purchase.  
-⏱   Efficiency: Streamlined processes reduce paperwork and middlemen.  
-                                                                    Tech Stack Used  
-- Solidity: For writing the smart contract.  
-- Remix IDE: For compiling and deploying the contract.  
-- Ethereum Blockchain: For secure and decentralized execution.  
-This project was a fantastic learning experience, and I’m excited to explore more ways blockchain can empower small and medium enterprises (SMEs) in agriculture and beyond.  
-#Blockchain #SmartContracts #Solidity #RemixIDE #AgriTech #CoffeeFarm #MSME #Web3 #Ethereum #Innovation #TechForGood
+// SPDX-License-Identifier: MIT
+   pragma solidity ^0.8.0;
 
+   contract CoffeeFarm {
+       // Struct to represent a coffee batch
+       struct CoffeeBatch {
+           uint256 batchId;
+           string farmName;
+           string origin;
+           uint256 harvestDate;
+           uint256 roastingDate;
+           string qualityGrade;
+           address currentOwner;
+           bool isSold;
+       }
+
+       // Mapping to store coffee batches
+       mapping(uint256 => CoffeeBatch) public coffeeBatches;
+
+       // Counter for batch IDs
+       uint256 public batchCounter;
+
+       // Function to create a new coffee batch
+       function createBatch(
+           string memory _farmName,
+           string memory _origin,
+           uint256 _harvestDate
+       ) public {
+           batchCounter++;
+           coffeeBatches[batchCounter] = CoffeeBatch({
+               batchId: batchCounter,
+               farmName: _farmName,
+               origin: _origin,
+               harvestDate: _harvestDate,
+               roastingDate: 0,
+               qualityGrade: "",
+               currentOwner: msg. sender,
+               isSold: false
+           });
+       }
+
+       // Function to get batch details
+       function getBatchDetails(uint256 _batchId) public view returns (
+           uint256 batchId,
+           string memory farmName,
+           string memory origin,
+           uint256 harvestDate,
+           uint256 roastingDate,
+           string memory qualityGrade,
+           address currentOwner,
+           bool isSold
+       ) {
+           CoffeeBatch memory batch = coffeeBatches[_batchId];
+           return (
+               batch.batchId,
+               batch.farmName,
+               batch.origin,
+               batch.harvestDate,
+               batch.roastingDate,
+               batch.qualityGrade,
+               batch.currentOwner,
+               batch.isSold
+           );
+       }
+   }
